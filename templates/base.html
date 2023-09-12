@@ -1,15 +1,82 @@
-<!doctype html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<title>Flask Tutorial!</title>
-	<script src="/static/base.js"></script>
-	<link href="/static/base.css" rel="stylesheet" type="text/css">
-	<link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans&display=swap" rel="stylesheet"> 
+    {% block head %}
+    <title>{% block title %}{% endblock %} - AMA WIKI</title>
+    {% endblock %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            background-color: #333;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+        li {
+            float: left;
+        }
+        li a, li p {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        li p {
+            font-size: 14px;
+            margin: 0;
+        }
+        li a:hover {
+            background-color: #111;
+        }
+        div {
+            margin: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        }
+        form {
+            display: inline-block;
+            margin-left: 0px;
+        }
+        input[type=text] {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid black;
+            font-size: 14px;
+            width: 200px;
+        }
+        button[type=submit] {
+            padding: 16px 8px;
+            background-color: #111;
+            color: white;
+            border: 1px solid black;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-left: -3px;
+        }
+    </style>
 </head>
 <body>
-	<h1>Hello!</h1>
-	<p>
-		The random number is:
-		<cb>{{ random_number }}</cb>! <!--Gets the random number from the python file-->
-	</p>
-	<a href="/2">Visit site 2</a>
+    <ul>    
+        <li><a href="/">Home</a></li>
+        <li><a>Pages</a></li>
+        <li><a>About</a></li>
+        <li><a>Upload</a></li>
+        <li><a>Logout</a></li>
+    </ul> 
+    <div>       
+        {% block content %}
+        <p>WELCOME TO SOCCER WIKI!</p>
+        {% endblock %}
+    </div>   
 </body>
+</html>
+
