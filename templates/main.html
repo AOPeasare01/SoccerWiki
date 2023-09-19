@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <title>{% block title %}{% endblock %} - AMA WIKI</title>
+    {% endblock %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            background-color: #333;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+        li {
+            float: left;
+        }
+        li a, li p {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        li p {
+            font-size: 14px;
+            margin: 0;
+        }
+        li a:hover {
+            background-color: #111;
+        }
+        div {
+            margin: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        }
+        form {
+            display: inline-block;
+            margin-left: 0px;
+        }
+        input[type=text] {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid black;
+            font-size: 14px;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/pages">Pages</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/upload">Upload</a></li>
+        <li><a href="/login">Login</a></li>          
+        <li><a href="/signup">Sign Up</a></li>
+    </ul> 
+    <div>       
+        {% block content %}{% endblock %}
+    </div>   
+</body>
+</html>

@@ -1,0 +1,17 @@
+{% extends "main.html" %}
+
+{% block title %}
+SIGN-UP
+{% endblock %}
+
+{% block content %}
+  <h1>Sign Up</h1>
+  <form method="POST" action="{{ url_for('signup') }}">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" placeholder = "Username" required>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" placeholder = "Password"required>
+    <button type="submit">Sign up</button>
+    <p>Already Registered User? Click here to <a href="/login">login</a></p>
+  </form>
+{% endblock %}

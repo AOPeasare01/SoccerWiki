@@ -1,0 +1,23 @@
+{% extends "main.html" %}
+
+
+{% block title %}
+LOGIN
+{% endblock %}
+
+
+<!-- Creating Both Bars for Username and Password inputs. Also creates submit button. -->
+{% block content %}
+<h1> Login </h1>
+<form method = "POST" action = "/login" >
+    <label for="username">Username:</label>
+    <input type = "text" placeholder = "Username" name = "username" required>
+    <label for="password">Password:</label>
+    <input type = "password" placeholder = "Password" name = "password" required>
+    <button type = "submit"> Login </button>
+</form>
+
+<p>Not a registered user? Click here to <a href="/signup">Sign Up</a></p>
+
+
+{% endblock %}
