@@ -1,4 +1,5 @@
 import re
+from io import BytesIO
 
 from flask import Flask
 from google.cloud import storage
@@ -51,4 +52,27 @@ def create_page_attributes(self,file_name,user,image_url,storage_client=storage.
             blob = bucket.blob(f'pages/{file_name}/attributes')
             blob.upload_from_string(json_data,content_type="application/json")
 
+def get_image(self,file_name, storage_client=storage.Client(),
+  bytes_io=BytesIO):
+  '''Returns an image from the ama_wiki_content bucket, in the ama_images folder
+
+Extracts a blob from the ama_wiki_content bucket that can be used as a route for an image to be rendered in html
+
+Args:
+file_name: used to complete the path required to find the image blob in the bucket.
+storage_client: used to accept mock storage client, default is normal storage client
+bytes_io: used to accept mock bytes io class, default is normal BytesIO class
+Example class
+    class MockBytes:
+        def __init__(self,data):
+            self.data = data
+        def read(self):
+            return self.data
+'''
+  bucket = storage_client.bucket('ama_wiki_content')
+  blob = bucket.blob('ama_images/' + file_name)
+  
+  if blob.exists():
+    with blob.open("rb") as f:
+       return bytes_io(f.read())
 

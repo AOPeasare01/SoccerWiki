@@ -103,4 +103,105 @@ def test_get_page_attributes_fail(mock_storage):
     mock_storage.bucket.assert_called_with('ama_wiki_content')
     my_bucket.blob.assert_called_with('pages/my_file/attributes')
 
+@patch("google.cloud.storage.Client")
+def test_get_image_succeeds(mock_storage):
+    ''' Tests get_image() and expects a successful retrival
+
+    Tests get_image() and expects a successful retrival.
+    Removes dependencies: storage client, bucket, blob, and bytesio
+
+    '''
+
+    class MockBytes:
+        '''Mocks the class of BytesIO
+
+        Mocks the class of BytesIO with similar needed methods.
+
+        Attributes:
+            data: saves data when initializing the object
+        '''
+
+        def __init__(self, data):
+            self.data = data
+
+        def read(self):
+            '''
+            Returns the attribute data in the class
+            '''
+            return self.data
+
+    # Creates Magic Mocks
+    my_client = MagicMock()
+    my_bucket = MagicMock()
+    my_blob = MagicMock()
+
+    backend = Backend()
+
+    # Establishes return values for mock operations
+    mock_storage = my_client
+    my_client.bucket.return_value = my_bucket
+    my_bucket.blob.return_value = my_blob
+    my_blob.exists.return_value = True  # Makes the function believe that the blob exists
+
+    # Creates a mock image with binary data
+    my_image_data = b"This is an image"
+
+    # Sets blob open value of read to mock image
+    my_blob.open = mock_open(read_data=my_image_data)
+
+    # Returns a bytesio object, in this case, the mock bytes io object.
+    results = backend.get_image('my_image_name', mock_storage, MockBytes)
+
+    # Calls the method read() inside the mock bytesio object returned from get_image()
+    assert results.read() == my_image_data
+
+
+@patch("google.cloud.storage.Client")
+def test_get_image_fail(mock_storage):
+    ''' Tests get_image() and expects a unsuccessful retrival
+
+    Tests get_image() and expects a successful retrival.
+    Removes dependencies: storage client, bucket, blob, and bytesio
+
+    '''
+
+    class MockBytes:
+        '''Mocks the class of BytesIO with similar needed methods.
+
+        Attributes:
+            data: saves data when initializing the object
+        '''
+
+        def __init__(self, data):
+            self.data = data
+
+        def read(self):
+            # Returns the attribute data in the class
+            return self.data
+
+    # Creates Magic Mocks
+    my_client = MagicMock()
+    my_bucket = MagicMock()
+    my_blob = MagicMock()
+
+    backend = Backend()
+
+    # Establishes return values for mock operations
+    mock_storage = my_client
+    my_client.bucket.return_value = my_bucket
+    my_bucket.blob.return_value = my_blob
+    my_blob.exists.return_value = False  # Makes the function believe that the blob does not exist
+
+    # Creates a mock image with binary data
+    my_image_data = b"This is an image"
+
+    # Sets blob open value of read to mock image
+    my_blob.open = mock_open(read_data=my_image_data)
+
+    # Returns a bytesio object, in this case, the mock bytes io object.
+    results = backend.get_image('my_image_name', mock_storage, MockBytes)
+
+    # Since the blob does not exist, it returns None
+    assert results == None
+
 
