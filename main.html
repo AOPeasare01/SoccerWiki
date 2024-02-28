@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='/images/favicon.png') }}" />
+
+    <title>{% block title %}{% endblock %} - Soccer WikiI</title>
+    {% endblock %}
+
+    <meta name="description" content="Experience football">
+    <!-- Add some coding keywords below, Ex: (React, CSS etc) -->
+    <meta name="keywords" content="Experience football" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}" />
+    <button id="darkModeToggle">🌓 Toggle dark mode</button>
+
+    <script>
+    function myFunction() {
+    var element = document.body;
+    element.classList.toggle("dark-mode");
+    
+    // Change button label based on dark mode state
+    var button = document.getElementById('darkModeToggle');
+    if (element.classList.contains("dark-mode")) {
+      button.innerHTML = "🌕 Toggle light mode"; // Moon icon for dark mode
+    } else {
+      button.innerHTML = "🌓 Toggle dark mode"; // Default icon
+    }
+  }
+
+    // Attach the event listener to the button
+    document.getElementById('darkModeToggle').onclick = myFunction;
+    </script>
+
+
+
+    <!-- <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            background-color: #333;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+        li {
+            float: left;
+        }
+        li a, li p {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        li p {
+            font-size: 14px;
+            margin: 0;
+        }
+        li a:hover {
+            background-color: #111;
+        }
+        div {
+            margin: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        }
+        form {
+            display: inline-block;
+            margin-left: 0px;
+        }
+        input[type=text] {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid black;
+            font-size: 14px;
+            width: 200px;
+        }
+        button[type=submit] {
+            padding: 16px 8px;
+            background-color: #111;
+            color: white;
+            border: 1px solid black;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-left: -3px;
+        }
+    </style> -->
+</head>
+<body>
+  <div id="google_translate_element"></div>
+  <script>
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+  }
+  </script>
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <header class="header" role="banner" id="top">
+        <div class="row">
+          <nav class="nav" role="navigation">
+            <ul class="nav__items">
+              {%  if current_user.is_authenticated %}  
+              <li class="nav__item"><a href="/" class="nav__link">Home</a></li>
+              <li class="nav__item"><a href="/pages" class="nav__link">Pages</a></li>
+              <li class="nav__item">
+                <a href="/about" class="nav__link">About</a>
+              </li>
+              <li class="nav__item"><a href="/upload" class="nav__link">Upload</a></li>
+              <li class="nav__item">
+                <a href="/logout" class="nav__link">Logout</a>
+              </li>
+              <!-- User Avatar -->
+              <li class="nav__item user-avatar">
+                <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed={{ current_user.id }}" alt="User Avatar">
+                
+                <span class="username">{{ current_user.id }}</span>
+              </li>
+              <!-- <li class="nav__item"><a href="#marker" class="nav__link">Logged in as: {{ current_user.id }}</a></li> -->
+
+              {% else %}
+              <li class="nav__item"><a href="/" class="nav__link">Home</a></li>
+              <li class="nav__item"><a href="/pages" class="nav__link">Pages</a></li>
+              <li class="nav__item">
+                <a href="/about" class="nav__link">About</a>
+              </li>
+              <li class="nav__item"><a href="/login" class="nav__link">Log In</a></li>
+              <li class="nav__item">
+                <a href="/signup" class="nav__link">Sign Up</a>
+              </li>
+
+              {% endif %}        
+              <form action="/search" method="POST">
+                <input type="text" name="query" placeholder="Search..." required>
+                <button type="submit" class="btn btn--pink">Search</button>
+              </form>
+            </ul>
+          </nav>
+        </div>
+    </header>
+    <div>       
+        {% block content %}
+        {% endblock %}
+    </div> 
+</body>
+</html>
+
