@@ -1,0 +1,98 @@
+{% extends "main.html" %}
+
+{% block title %}
+PAGE RESULTS
+{% endblock %}
+
+{% block content %}
+<h1>{{ pagename }}</h1>
+<h4>Published by: {{ author }}</h4>
+
+{% autoescape false %}    
+<div id="google_translate_element"></div>
+<script>
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+}
+</script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<p> {{ contents }}</p>
+
+
+<div id="like-dislike-buttons"></div>
+{%  if current_user.is_authenticated %}
+<script type="text/babel">
+  function LikeDislikeButtons({ pagename, author }) {
+    const [likes, setLikes] = React.useState(0);
+    const [dislikes, setDislikes] = React.useState(0);
+
+    const handleReaction = async (like) => {
+      try {
+        const response = await fetch(`/api/pages/${pagename}/react`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ like }),
+        });
+        if (!response.ok) throw new Error('Network response was not ok.');
+        const data = await response.json();
+        setLikes(data.likes);
+        setDislikes(data.dislikes);
+      } catch (error) {
+        console.error('Error updating reaction:', error);
+      }
+    };
+
+    // Fetch current likes and dislikes when the component mounts
+    React.useEffect(() => {
+      const fetchCounts = async () => {
+        try {
+          const response = await fetch(`/api/pages/${pagename}/counts`);
+          if (!response.ok) throw new Error('Network response was not ok.');
+          const data = await response.json();
+          setLikes(data.likes);
+          setDislikes(data.dislikes);
+        } catch (error) {
+          console.error('Error fetching counts:', error);
+        }
+      };
+
+      fetchCounts();
+    }, [pagename]); // Dependency array, re-fetch if pagename changes
+    return (
+        <div>
+            <button className="reaction-button upvote" onClick={() => handleReaction(true)}>👍 Like</button>
+            <span>{likes}</span>
+            <button className="reaction-button downvote" onClick={() => handleReaction(false)}>👎 Dislike</button>
+            <span>{dislikes}</span>
+        </div>
+    );
+  }
+
+  ReactDOM.render(<LikeDislikeButtons pagename="{{ pagename }}" author="{{ author }}" />, document.getElementById('like-dislike-buttons'));
+</script>
+{% endif %}
+
+{% endautoescape %}
+
+<p> Share this page to: </p>
+<!-- Facebook Share Button -->
+<a href="#" class="share-button" onclick="shareOnFacebook()">
+    <img src="{{ url_for('static', filename='fb.svg') }}" alt="Facebook" class="icon social-icon">
+</a>
+
+<!-- Twitter Share Button -->
+<a href="#" class="share-button" onclick="shareOnTwitter()">
+    <img src="{{ url_for('static', filename='twitter.svg') }}" alt="Twitter" class="icon social-icon">
+</a>
+
+<!-- LinkedIn Share Button -->
+<a href="#" class="share-button" onclick="shareOnLinkedIn()">
+    <img src="{{ url_for('static', filename='linkedin.svg') }}" alt="LinkedIn" class="icon social-icon">
+</a>
+
+
+<script src="{{ url_for('static', filename='socialShare.js') }}"></script>
+
+{% endblock %}

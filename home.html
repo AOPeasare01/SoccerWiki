@@ -1,0 +1,40 @@
+{% extends "main.html" %}
+
+{% block title %}
+HOME
+{% endblock %}
+
+{% block content %}
+
+{%  if current_user.is_authenticated %}
+<!-- <p>Welcome to AMA Wiki, {{ current_user.id }}!</p> -->
+<h1 id="welcomeMessage">WELCOME TO Soccer WIKI {{ current_user.id }}</h1>
+{% else%}
+<p>Welcome to AMA Wiki!</p>
+{% endif %}
+
+<div class="container">
+    <div class="header">Matches</div>
+    {% for event in news_data['response'] %}
+    <div class="match">
+        <div class="team">
+            <img src="{{ event.team.logo }}" alt="{{ event.team.name }}" class="team-logo">
+            <p>{{ event.team.name }}</p>
+        </div>
+        <div class="match-info">
+            <p>VS</p>
+        </div>
+        <div class="team">
+            <!-- Assuming the second team is accessible here, you might need to adjust based on actual structure -->
+            <img src="{{ event.team.logo }}" alt="Opposing Team" class="team-logo">
+            <p>Opposing Team Name</p>
+        </div>
+        <div class="time-location">
+            <p>{{ event.time.elapsed }}</p>
+            <p>Location Name</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
